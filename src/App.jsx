@@ -119,7 +119,7 @@ function App() {
                 </main>
 
                 <footer className="text-center mt-16 py-8 border-t border-gray-200">
-                    <p className="text-gray-500">Built with React, Firebase, and Tailwind CSS</p>
+                    <p className="text-gray-500">Built with React, Supabase, and Tailwind CSS</p>
                 </footer>
             </div>
         </div>
