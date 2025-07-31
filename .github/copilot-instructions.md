@@ -8,7 +8,7 @@ This is a React-based wine collection management application with the following 
 
 -   **Frontend**: React.js with Vite for fast development and optimized builds
 -   **Database**: Supabase PostgreSQL for real-time, persistent data storage
--   **Authentication**: Simplified (no authentication required)
+-   **Authentication**: Clerk for secure Google authentication
 -   **Styling**: Tailwind CSS for modern, responsive design
 -   **Icons**: Heroicons for consistent iconography
 -   **Deployment**: Vercel with native Supabase integration
@@ -16,9 +16,10 @@ This is a React-based wine collection management application with the following 
 ## Project Structure
 
 -   `src/supabase.js` - Supabase client configuration and initialization
--   `src/useSupabaseAuth.js` - Simplified auth hook (no authentication required)
+-   `src/useClerkAuth.js` - Clerk authentication hook
 -   `src/supabaseWineService.js` - Supabase database operations for wine CRUD
 -   `src/components/` - React components for the UI
+-   `src/components/ProtectedAction.jsx` - Component wrapper for authenticated-only actions
 -   `supabase-schema.sql` - Database schema for Supabase initialization
 
 ## Key Features

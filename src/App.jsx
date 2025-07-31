@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo } from "react"
-import { useAuth } from "./useSupabaseAuth"
+import { useAuth } from "./useClerkAuth"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
 import { subscribeToWines, addWine, updateWineStock, updateWineRating, deleteWine, getWines } from "./supabaseWineService"
 import WineForm from "./components/WineForm"
 import Controls from "./components/Controls"
 import WineList from "./components/WineList"
+import ProtectedAction from "./components/ProtectedAction"
 
 function App() {
     const { loading } = useAuth()
@@ -97,12 +99,37 @@ function App() {
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-4 py-8">
                 <header className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">🍷 Wine Collection</h1>
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="flex-1"></div>
+                        <div className="flex-1 flex justify-center">
+                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">🍷 Wine Collection</h1>
+                        </div>
+                        <div className="flex-1 flex justify-end">
+                            <SignedIn>
+                                <UserButton
+                                    appearance={{
+                                        elements: {
+                                            avatarBox: "h-10 w-10",
+                                        },
+                                    }}
+                                />
+                            </SignedIn>
+                            <SignedOut>
+                                <SignInButton mode="modal">
+                                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors" title="Sign in to add, edit, or delete wines">
+                                        Sign In
+                                    </button>
+                                </SignInButton>
+                            </SignedOut>
+                        </div>
+                    </div>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">Manage your personal wine collection with style. Add new bottles, track your stock, rate your favorites, and keep everything organized in one beautiful place.</p>
                 </header>
 
                 <main className="max-w-7xl mx-auto">
-                    <WineForm onAddWine={handleAddWine} />
+                    <ProtectedAction>
+                        <WineForm onAddWine={handleAddWine} />
+                    </ProtectedAction>
 
                     <Controls searchTerm={searchTerm} onSearchChange={setSearchTerm} sortBy={sortBy} onSortChange={setSortBy} />
 

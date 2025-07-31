@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { StarIcon, PlusIcon, MinusIcon, TrashIcon, MapPinIcon, CalendarIcon, BuildingOfficeIcon } from "@heroicons/react/24/outline"
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid"
+import ProtectedAction from "./ProtectedAction"
 
 const WineItem = ({ wine, onUpdateStock, onUpdateRating, onDeleteWine }) => {
     const [isUpdating, setIsUpdating] = useState(false)
@@ -44,9 +45,11 @@ const WineItem = ({ wine, onUpdateStock, onUpdateRating, onDeleteWine }) => {
         const stars = []
         for (let i = 1; i <= 5; i++) {
             stars.push(
-                <button key={i} onClick={() => handleRatingChange(i)} disabled={isUpdating} className="focus:outline-none disabled:opacity-50">
-                    {i <= wine.rating ? <StarIconSolid className="h-5 w-5 text-yellow-400" /> : <StarIcon className="h-5 w-5 text-gray-300 hover:text-yellow-400 transition-colors" />}
-                </button>
+                <ProtectedAction key={i} fallback={<div className="h-5 w-5">{i <= wine.rating ? <StarIconSolid className="h-5 w-5 text-yellow-400" /> : <StarIcon className="h-5 w-5 text-gray-300" />}</div>}>
+                    <button onClick={() => handleRatingChange(i)} disabled={isUpdating} className="focus:outline-none disabled:opacity-50">
+                        {i <= wine.rating ? <StarIconSolid className="h-5 w-5 text-yellow-400" /> : <StarIcon className="h-5 w-5 text-gray-300 hover:text-yellow-400 transition-colors" />}
+                    </button>
+                </ProtectedAction>
             )
         }
         return stars
@@ -63,9 +66,11 @@ const WineItem = ({ wine, onUpdateStock, onUpdateRating, onDeleteWine }) => {
                     </div>
                 </div>
 
-                <button onClick={handleDelete} disabled={isUpdating} className="text-red-500 hover:text-red-700 focus:outline-none disabled:opacity-50 transition-colors" title="Delete wine">
-                    <TrashIcon className="h-5 w-5" />
-                </button>
+                <ProtectedAction fallback={<div className="w-5 h-5"></div>}>
+                    <button onClick={handleDelete} disabled={isUpdating} className="text-red-500 hover:text-red-700 focus:outline-none disabled:opacity-50 transition-colors" title="Delete wine">
+                        <TrashIcon className="h-5 w-5" />
+                    </button>
+                </ProtectedAction>
             </div>
 
             <div className="space-y-3">
@@ -98,15 +103,17 @@ const WineItem = ({ wine, onUpdateStock, onUpdateRating, onDeleteWine }) => {
                     <div className="flex items-center space-x-3">
                         <span className="text-sm font-medium text-gray-700">Stock:</span>
                         <div className="flex items-center space-x-2">
-                            <button onClick={() => handleStockChange(-1)} disabled={isUpdating || wine.bottlesInStock === 0} className="p-1 rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                                <MinusIcon className="h-4 w-4" />
-                            </button>
+                            <ProtectedAction fallback={<span className="text-lg font-bold text-gray-900 min-w-[2rem] text-center">{wine.bottlesInStock}</span>}>
+                                <button onClick={() => handleStockChange(-1)} disabled={isUpdating || wine.bottlesInStock === 0} className="p-1 rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    <MinusIcon className="h-4 w-4" />
+                                </button>
 
-                            <span className="text-lg font-bold text-gray-900 min-w-[2rem] text-center">{wine.bottlesInStock}</span>
+                                <span className="text-lg font-bold text-gray-900 min-w-[2rem] text-center">{wine.bottlesInStock}</span>
 
-                            <button onClick={() => handleStockChange(1)} disabled={isUpdating} className="p-1 rounded-full bg-green-100 text-green-600 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                                <PlusIcon className="h-4 w-4" />
-                            </button>
+                                <button onClick={() => handleStockChange(1)} disabled={isUpdating} className="p-1 rounded-full bg-green-100 text-green-600 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    <PlusIcon className="h-4 w-4" />
+                                </button>
+                            </ProtectedAction>
                         </div>
                     </div>
                 </div>
